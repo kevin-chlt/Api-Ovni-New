@@ -22,7 +22,7 @@ class Articles
     /**
      * @ORM\Column(type="text")
      */
-    private $titles;
+    private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
@@ -54,10 +54,16 @@ class Articles
      */
     private $authors;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="articles")
+     */
+    private $category;
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
         $this->authors = new ArrayCollection();
+        $this->category = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,14 +71,14 @@ class Articles
         return $this->id;
     }
 
-    public function getTitles(): ?string
+    public function getTitle(): ?string
     {
-        return $this->titles;
+        return $this->title;
     }
 
-    public function setTitles(string $titles): self
+    public function setTitle(string $title): self
     {
-        $this->titles = $titles;
+        $this->title = $title;
 
         return $this;
     }
@@ -101,13 +107,14 @@ class Articles
         return $this;
     }
 
-    public function getPublishedAt(): ?\DateTimeInterface
+    public function getPublishedAt(): \DateTimeInterface
     {
         return $this->publishedAt;
     }
 
     public function setPublishedAt(\DateTimeInterface $publishedAt): self
     {
+
         $this->publishedAt = $publishedAt;
 
         return $this;
@@ -175,6 +182,30 @@ class Articles
     public function removeAuthor(Authors $author): self
     {
         $this->authors->removeElement($author);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Category[]
+     */
+    public function getCategory(): Collection
+    {
+        return $this->category;
+    }
+
+    public function addCategory(Category $category): self
+    {
+        if (!$this->category->contains($category)) {
+            $this->category[] = $category;
+        }
+
+        return $this;
+    }
+
+    public function removeCategory(Category $category): self
+    {
+        $this->category->removeElement($category);
 
         return $this;
     }

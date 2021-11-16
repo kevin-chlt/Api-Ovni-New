@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
@@ -16,15 +18,49 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
      * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="UUID")
+     * @ORM\Column(type="string", length=36)
      */
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=180, unique=true)
+     * @ORM\Column(type="string", length=255, unique=true)
+     * @Assert\Email(message="Cette adresse email n'est pas valide.")
+     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
      */
     private $email;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\Regex(pattern="/^[.A-zÀ-ÿ-]+$/", message="Les lettres et les tirets sont seulement autorisés.")
+     * @Assert\Length(min=3, minMessage="Le champ doit contenir au minimum {{ limit }} caractères.",
+     *     max=255, maxMessage="Le champ doit contenir au maximum {{ limit }} caractères.")
+     */
+    private $firstname;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\Regex(pattern="/^[.A-zÀ-ÿ-]+$/", message="Les lettres et les tirets sont seulement autorisés.")
+     * @Assert\Length(min=3, minMessage="Le champ doit contenir au minimum {{ limit }} caractères.",
+     *     max=255, maxMessage="Le champ doit contenir au maximum {{ limit }} caractères.")
+     */
+    private $lastname;
+
+    /**
+     * @ORM\Column(type="date")
+     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\LessThan(value="today", message="Vous ne pouvez pas être né après aujourd'hui")
+     * @Assert\GreaterThan(value="-120 years", message="Vous ne pouvez pas avoir plus de 120 ans")
+     * @Assert\Date(message="Date de naissance invalide")
+     */
+    private $birthdate;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     /**
      * @ORM\Column(type="json")
@@ -34,6 +70,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
      */
     private $password;
 
@@ -42,9 +79,11 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $comments;
 
+
     public function __construct()
     {
         $this->comments = new ArrayCollection();
+        $this->createdAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -162,6 +201,54 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
                 $comment->setUsers(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getFirstname(): ?string
+    {
+        return $this->firstname;
+    }
+
+    public function setFirstname(string $firstname): self
+    {
+        $this->firstname = $firstname;
+
+        return $this;
+    }
+
+    public function getLastname(): ?string
+    {
+        return $this->lastname;
+    }
+
+    public function setLastname(string $lastname): self
+    {
+        $this->lastname = $lastname;
+
+        return $this;
+    }
+
+    public function getBirthdate(): ?\DateTimeInterface
+    {
+        return $this->birthdate;
+    }
+
+    public function setBirthdate(\DateTimeInterface $birthdate): self
+    {
+        $this->birthdate = $birthdate;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    private function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

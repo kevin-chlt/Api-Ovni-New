@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\ArticlesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -10,6 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ArticlesRepository::class)
  */
+#[ApiResource]
 class Articles
 {
     /**
@@ -64,6 +66,7 @@ class Articles
         $this->comments = new ArrayCollection();
         $this->authors = new ArrayCollection();
         $this->category = new ArrayCollection();
+        $this->publishedAt = new \DateTime();
     }
 
     public function getId(): ?int
@@ -114,7 +117,6 @@ class Articles
 
     public function setPublishedAt(\DateTimeInterface $publishedAt): self
     {
-
         $this->publishedAt = $publishedAt;
 
         return $this;

@@ -2,18 +2,24 @@
 
 namespace App\Services;
 
+use App\Entity\Category;
 
 class ApiCaller
 {
-    const CATEGORIES = ['business', 'health', 'entertainment', 'general', 'science', 'technology', 'sports'];
+    const CATEGORIES_ACCEPTED = ['business', 'health', 'entertainment', 'general', 'science', 'technology', 'sports'];
+    private $apiKey;
 
-    public function getDataFromApi (string $category) : ?array
+    public function __construct (string $apiKey) {
+        $this->apiKey = $apiKey;
+    }
+
+    public function getDataFromApi (Category $category) : ?array
     {
-        if (!in_array($category, self::CATEGORIES)) {
+        if (!in_array($category->getName(), self::CATEGORIES_ACCEPTED)) {
             return null;
         }
 
-        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category . '&pageSize=20&language=fr&apiKey='.$_SERVER['NEWS_API_KEY'];
+        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getName() . '&pageSize=20&language=fr&apiKey='.$this->apiKey;
         $ressource = fopen($url, 'r');
 
         if (!is_resource($ressource)){
@@ -37,4 +43,6 @@ class ApiCaller
         return $dataFiltered;
     }
 
+    private function getApiKey () {}
+    private function setApiKey () {}
 }

@@ -32,6 +32,11 @@ class Authors
      */
     private $articles;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -77,6 +82,18 @@ class Authors
         if ($this->articles->removeElement($article)) {
             $article->removeAuthor($this);
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

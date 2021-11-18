@@ -32,6 +32,7 @@ class ApiCaller
         return $this->checkDataFromApi($data);
     }
 
+
     private function checkDataFromApi (array $data) : array
     {
         $dataFiltered = [];

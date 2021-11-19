@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/articles')]
 class ArticlesController extends AbstractController
 {
-    #[Route('/{name}', name: 'category_index')]
+    #[Route('/{id}', name: 'category_index')]
     public function index (ApiCaller $apiCaller, Category $category, EntityManagerInterface $entityManager) : JsonResponse
     {
         $data = $apiCaller->getDataFromApi($category);

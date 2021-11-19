@@ -15,11 +15,12 @@ class ApiCaller
 
     public function getDataFromApi (Category $category) : ?array
     {
-        if (!in_array($category->getName(), self::CATEGORIES_ACCEPTED)) {
+
+        if (!in_array($category->getSlug(), self::CATEGORIES_ACCEPTED)) {
             return null;
         }
 
-        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getName() . '&pageSize=20&language=fr&apiKey='.$this->apiKey;
+        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getSlug() . '&pageSize=20&language=fr&apiKey='.$this->apiKey;
         $ressource = fopen($url, 'r');
 
         if (!is_resource($ressource)){
@@ -31,6 +32,7 @@ class ApiCaller
         $data = json_decode($ressourceJSON, true);
         return $this->checkDataFromApi($data);
     }
+
 
     private function checkDataFromApi (array $data) : array
     {

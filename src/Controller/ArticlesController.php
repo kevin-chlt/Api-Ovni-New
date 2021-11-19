@@ -13,13 +13,14 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/articles')]
 class ArticlesController extends AbstractController
 {
-    #[Route('/{name}', name: 'category_index')]
+
+    #[Route('/{id}', name: 'category_index')]
     public function index (ApiCaller $apiCaller, Category $category, EntityManagerInterface $entityManager) : JsonResponse
     {
         $data = $apiCaller->getDataFromApi($category);
 
         if ($data === null) {
-            return $this->json('Un problème est apparu dans la reception, veuillez réessayer',404);
+            return $this->json('Un problème est apparu dans la reception, veuillez réessayer', 404);
         }
 
         foreach ($data as $article) {

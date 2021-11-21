@@ -7,6 +7,7 @@ use App\Repository\UsersRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -14,6 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass=UsersRepository::class)
+ * @UniqueEntity("email", message="Un compte existe déjà avec cette email")
  */
 #[ApiResource]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
@@ -55,7 +57,6 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\NotBlank(message="Vous devez remplir ce champ.")
      * @Assert\LessThan(value="today", message="Vous ne pouvez pas être né après aujourd'hui")
      * @Assert\GreaterThan(value="-120 years", message="Vous ne pouvez pas avoir plus de 120 ans")
-     * @Assert\Date(message="Date de naissance invalide")
      */
     private $birthdate;
 
@@ -88,12 +89,12 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->createdAt = new \DateTime();
     }
 
-    public function getId(): ?int
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getEmail(): ?string
+    public function getEmail(): string
     {
         return $this->email;
     }
@@ -178,7 +179,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @return Collection|Comments[]
+     * @return Collection
      */
     public function getComments(): Collection
     {

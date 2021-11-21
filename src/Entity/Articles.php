@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use App\Repository\ArticlesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -11,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ArticlesRepository::class)
  */
-#[ApiResource]
+#[ApiResource(normalizationContext: ['groups' => ['article_read']])]
 class Articles
 {
     /**
@@ -24,41 +25,49 @@ class Articles
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["article_read"])]
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
+    #[Groups(["article_read"])]
     private $description;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["article_read"])]
     private $urlToImage;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(["article_read"])]
     private $publishedAt;
 
     /**
      * @ORM\Column(type="text")
      */
+    #[Groups(["article_read"])]
     private $externalLink;
 
     /**
      * @ORM\OneToMany(targetEntity=Comments::class, mappedBy="articles", orphanRemoval=true)
      */
+    #[Groups(["article_read"])]
     private $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity=Authors::class, inversedBy="articles", cascade={"persist"})
      */
+    #[Groups(["article_read"])]
     private $authors;
 
     /**
      * @ORM\ManyToMany(targetEntity=Category::class, inversedBy="articles")
      */
+    #[Groups(["article_read"])]
     private $category;
 
     public function __construct()

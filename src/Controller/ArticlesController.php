@@ -2,10 +2,9 @@
 
 namespace App\Controller;
 
-use App\Entity\Articles;
 use App\Entity\Category;
+use App\Repository\ArticlesRepository;
 use App\Services\ApiCaller;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,30 +13,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticlesController extends AbstractController
 {
 
-    #[Route('/{id}', name: 'category_index')]
-    public function index (ApiCaller $apiCaller, Category $category, EntityManagerInterface $entityManager) : JsonResponse
+    #[Route('/{slug}', name: 'category_index')]
+    public function index (ApiCaller $apiCaller, Category $category, ArticlesRepository $articlesRepository) : JsonResponse
     {
         $data = $apiCaller->getDataFromApi($category);
 
-        if ($data === null) {
+        if (!$data) {
             return $this->json('Un problème est apparu dans la reception, veuillez réessayer', 404);
         }
 
-        foreach ($data as $article) {
-            $articles = (new Articles())
-                ->setDescription($article['description'])
-                ->setExternalLink($article['url'])
-                ->setTitle($article['title'])
-                ->setUrlToImage($article['urlToImage']);
 
-
-            if($article['publishedAt'] !== null) {
-                $articles->setPublishedAt(new \DateTime($article['publishedAt']));
-            }
-
-            $entityManager->persist($articles);
-            $entityManager->flush();
-        }
-        return $this->json($data);
+        return $this->json($category->getArticles());
     }
 }

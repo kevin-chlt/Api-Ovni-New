@@ -52,7 +52,7 @@ class Articles
     private $comments;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Authors::class, inversedBy="articles")
+     * @ORM\ManyToMany(targetEntity=Authors::class, inversedBy="articles", cascade={"persist"})
      */
     private $authors;
 
@@ -135,7 +135,7 @@ class Articles
     }
 
     /**
-     * @return Collection|Comments[]
+     * @return Collection
      */
     public function getComments(): Collection
     {
@@ -165,7 +165,7 @@ class Articles
     }
 
     /**
-     * @return Collection|Authors[]
+     * @return Collection
      */
     public function getAuthors(): Collection
     {
@@ -189,7 +189,7 @@ class Articles
     }
 
     /**
-     * @return Collection|Category[]
+     * @return Collection
      */
     public function getCategory(): Collection
     {

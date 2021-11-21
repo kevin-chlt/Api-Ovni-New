@@ -2,35 +2,47 @@
 
 namespace App\Services;
 
+use App\Entity\Articles;
+use App\Entity\Authors;
 use App\Entity\Category;
+use App\Repository\AuthorsRepository;
+use Doctrine\ORM\EntityManagerInterface;
 
 class ApiCaller
 {
     const CATEGORIES_ACCEPTED = ['business', 'health', 'entertainment', 'general', 'science', 'technology', 'sports'];
     private $apiKey;
+    private $entityManager;
+    private $authorRepository;
 
-    public function __construct (string $apiKey) {
+    public function __construct (string $apiKey, AuthorsRepository $authorsRepository, EntityManagerInterface $entityManager) {
         $this->apiKey = $apiKey;
+        $this->authorsRepository = $authorsRepository;
+        $this->entityManager = $entityManager;
     }
 
-    public function getDataFromApi (Category $category) : ?array
+    public function getDataFromApi (Category $category) : bool
     {
 
         if (!in_array($category->getSlug(), self::CATEGORIES_ACCEPTED)) {
-            return null;
+            return false;
         }
 
         $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getSlug() . '&pageSize=20&language=fr&apiKey='.$this->apiKey;
         $ressource = fopen($url, 'r');
 
         if (!is_resource($ressource)){
-            return null;
+            return false;
         }
 
         $ressourceJSON = fgets($ressource);
         fclose($ressource);
         $data = json_decode($ressourceJSON, true);
-        return $this->checkDataFromApi($data);
+
+        $dataFiltered = $this->checkDataFromApi($data);
+        $this->addArticleInDB($dataFiltered,$category);
+
+        return true;
     }
 
 
@@ -42,9 +54,37 @@ class ApiCaller
                 $dataFiltered[] = $data['articles'][$i];
             }
         }
+
         return $dataFiltered;
     }
 
-    private function getApiKey () {}
-    private function setApiKey () {}
+
+    private function addArticleInDB (array $data, Category $category) : void
+    {
+
+        foreach ($data as $article) {
+            $articles = (new Articles())
+                ->setDescription($article['description'])
+                ->setExternalLink($article['url'])
+                ->setTitle($article['title'])
+                ->setUrlToImage($article['urlToImage'])
+                ->addCategory($category);
+
+            $authorInDb = $this->authorsRepository->findOneBy(['name' => $article['source']['name']]);
+
+            if( $authorInDb === null){
+                $author = (new Authors())->setName($article['source']['name']);
+                $articles->addAuthor($author);
+            } else {
+                $articles->addAuthor($authorInDb);
+            }
+
+            if($article['publishedAt'] !== null) {
+                $articles->setPublishedAt(new \DateTime($article['publishedAt']));
+            }
+
+            $this->entityManager->persist($articles);
+            $this->entityManager->flush();
+        }
+    }
 }

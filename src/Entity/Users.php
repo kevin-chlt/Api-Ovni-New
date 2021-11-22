@@ -55,8 +55,8 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="date")
      * @Assert\NotBlank(message="Vous devez remplir ce champ.")
-     * @Assert\LessThan(value="today", message="Vous ne pouvez pas être né après aujourd'hui")
-     * @Assert\GreaterThan(value="-120 years", message="Vous ne pouvez pas avoir plus de 120 ans")
+     * @Assert\GreaterThan(value="-120 years", message="Vous ne pouvez pas avoir plus de 120 ans.")
+     * @Assert\LessThan(value="-18 years", message="Vous devez être majeur pour vous inscrire sur ce site.")
      */
     private $birthdate;
 

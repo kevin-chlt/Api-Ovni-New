@@ -17,11 +17,11 @@ class UsersController extends AbstractController
     public function userRegistration (Request $request, UserPasswordHasherInterface $hasher, EntityManagerInterface $entityManager, ValidatorInterface $validator) : JsonResponse
     {
         $user = new Users();
-        $user->setEmail($request->get('email'))
-             ->setFirstname($request->get('firstname'))
-             ->setLastname($request->get('lastname'))
-             ->setPassword($hasher->hashPassword($user, $request->get('password')))
-             ->setBirthdate(new \DateTime($request->get('birthdate')));
+        $user->setEmail($request->get('data')['email'])
+             ->setFirstname($request->get('data')['firstname'])
+             ->setLastname($request->get('data')['lastname'])
+             ->setPassword($hasher->hashPassword($user, $request->get('data')['password']))
+             ->setBirthdate(new \DateTime($request->get('data')['birthdate']));
 
         $errors = $validator->validate($user);
         if($errors) {
@@ -29,7 +29,6 @@ class UsersController extends AbstractController
                 return $this->json($error);
             }
         }
-
 
         $entityManager->persist($user);
         $entityManager->flush($user);

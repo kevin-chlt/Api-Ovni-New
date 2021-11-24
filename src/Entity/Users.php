@@ -30,31 +30,31 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      * @Assert\Email(message="Cette adresse email n'est pas valide.")
-     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\NotBlank(message="Vous devez remplir tous les champs.")
      */
     private $email;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
-     * @Assert\Regex(pattern="/^[.A-zÀ-ÿ-]+$/", message="Les lettres et les tirets sont seulement autorisés.")
-     * @Assert\Length(min=3, minMessage="Le champ doit contenir au minimum {{ limit }} caractères.",
-     *     max=255, maxMessage="Le champ doit contenir au maximum {{ limit }} caractères.")
+     * @Assert\NotBlank(message="Vous devez remplir tous les champs.")
+     * @Assert\Regex(pattern="/^[.A-zÀ-ÿ-]+$/", message="Les lettres et les tirets sont seulement autorisés dans le champ 'prénom'.")
+     * @Assert\Length(min=3, minMessage="Le champ 'prénom' doit contenir au minimum {{ limit }} caractères.",
+     *     max=255, maxMessage="Le champ 'prénom' doit contenir au maximum 255 caractères.")
      */
     private $firstname;
 
     /**
      * @ORM\Column(type="string", length=255)
-     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\NotBlank(message="Vous devez remplir tous les champs.")
      * @Assert\Regex(pattern="/^[.A-zÀ-ÿ-]+$/", message="Les lettres et les tirets sont seulement autorisés.")
-     * @Assert\Length(min=3, minMessage="Le champ doit contenir au minimum {{ limit }} caractères.",
-     *     max=255, maxMessage="Le champ doit contenir au maximum {{ limit }} caractères.")
+     * @Assert\Length(min=3, minMessage="Le champ 'nom' doit contenir au minimum {{ limit }} caractères.",
+     *     max=255, maxMessage="Le champ 'nom'  doit contenir au maximum 255 caractères.")
      */
     private $lastname;
 
     /**
      * @ORM\Column(type="date")
-     * @Assert\NotBlank(message="Vous devez remplir ce champ.")
+     * @Assert\NotBlank(message="Vous devez remplir tous les champs.")
      * @Assert\GreaterThan(value="-120 years", message="Vous ne pouvez pas avoir plus de 120 ans.")
      * @Assert\LessThan(value="-18 years", message="Vous devez être majeur pour vous inscrire sur ce site.")
      */

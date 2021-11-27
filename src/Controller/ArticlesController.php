@@ -16,7 +16,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Entity;
 class ArticlesController extends AbstractController
 {
     #[Route('/{slug}', name: 'category_index')]
-    public function index (ApiCaller $apiCaller, Category $category) : JsonResponse
+    public function index (ApiCaller $apiCaller, Category $category, ArticlesRepository $articlesRepository) : JsonResponse
     {
         $data = $apiCaller->getDataFromApi($category);
 
@@ -24,7 +24,7 @@ class ArticlesController extends AbstractController
             return $this->json('Un problème est apparu dans la reception, veuillez réessayer', 404);
         }
 
-        return $this->json($category->getArticles());
+        return $this->json($articlesRepository->findArticleByCategory($category));
     }
 
     #[Route('/{slug}/{article_id}', name: 'article_show')]

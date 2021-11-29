@@ -27,9 +27,9 @@ class ArticlesController extends AbstractController
         return $this->json($articlesRepository->findArticleByCategory($category));
     }
 
-    #[Route('/{slug}/{article_id}', name: 'article_show')]
+    #[Route('/details/{article_id}', name: 'article_show')]
     #[Entity('articles', expr: 'repository.find(article_id)')]
-    public function getArticle (ArticlesRepository $articlesRepository, Articles $articles) : JsonResponse
+    public function getArticle (Articles $articles) : JsonResponse
     {
         return $this->json($articles);
     }

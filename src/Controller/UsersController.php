@@ -5,11 +5,13 @@ namespace App\Controller;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class UsersController extends AbstractController
 {
@@ -34,4 +36,11 @@ class UsersController extends AbstractController
         $entityManager->flush($user);
         return $this->json('Inscription réalisée avec succès.');
     }
+
+    #[Route('/user', name: 'getUserDetails', methods: ['GET', 'POST'])]
+    public function getUserDetails (TokenStorageInterface $tokenStorage, JWTTokenManagerInterface $JWTTokenManager) : JsonResponse
+    {
+        return $this->json($JWTTokenManager->decode($tokenStorage->getToken()));
+    }
+
 }

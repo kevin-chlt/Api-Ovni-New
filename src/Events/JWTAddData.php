@@ -17,7 +17,7 @@ class JWTAddData
 
     public function addDataToJWT (JWTCreatedEvent $event)
     {
-        $user = $this->userRepository->findOneBy(['id' => $event->getUser()]);
+        $user = $this->userRepository->find($event->getUser());
 
         $payload = $event->getData();
         $payload['firstname'] = $user->getFirstname();

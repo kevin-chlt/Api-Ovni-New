@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 
@@ -17,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UsersRepository::class)
  * @UniqueEntity("email", message="Un compte existe déjà avec cette email")
  */
-#[ApiResource]
+#[ApiResource(denormalizationContext: ['groups' => ['users_write']], normalizationContext: ['groups' => ['users_read']])]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -25,6 +26,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="string", length=36)
      */
+    #[Groups(['comments_read', 'users_read'])]
     private $id;
 
     /**
@@ -32,6 +34,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Email(message="Cette adresse email n'est pas valide.")
      * @Assert\NotBlank(message="Vous devez remplir tous les champs.")
      */
+    #[Groups(['comments_read', 'users_read'])]
     private $email;
 
     /**
@@ -41,6 +44,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(min=3, minMessage="Le champ 'prénom' doit contenir au minimum {{ limit }} caractères.",
      *     max=255, maxMessage="Le champ 'prénom' doit contenir au maximum 255 caractères.")
      */
+    #[Groups(['comments_read', 'users_read'])]
     private $firstname;
 
     /**
@@ -50,6 +54,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(min=3, minMessage="Le champ 'nom' doit contenir au minimum {{ limit }} caractères.",
      *     max=255, maxMessage="Le champ 'nom'  doit contenir au maximum 255 caractères.")
      */
+    #[Groups(['comments_read', 'users_read'])]
     private $lastname;
 
     /**

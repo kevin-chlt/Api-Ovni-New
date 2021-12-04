@@ -5,11 +5,12 @@ namespace App\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use App\Repository\CommentsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=CommentsRepository::class)
  */
-#[ApiResource]
+#[ApiResource(denormalizationContext: ['groups' => ['comments_write']], normalizationContext: ['groups' => ['comments_read']])]
 class Comments
 {
     /**
@@ -17,29 +18,35 @@ class Comments
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
+    #[Groups(['article_read', 'comments_read'])]
     private $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(['article_read', 'comments_read'])]
     private $content;
 
     /**
      * @ORM\Column(type="datetime")
      */
+    #[Groups(['article_read', 'comments_read'])]
     private $postedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Articles::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['article_read', 'comments_read'])]
     private $articles;
 
     /**
      * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
+    #[Groups(['article_read', 'comments_read'])]
     private $users;
+
 
     public function getId(): ?int
     {

@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ArticlesRepository::class)
  */
-#[ApiResource(denormalizationContext: ['groups' => ['article_write']], normalizationContext: ['groups' => ['article_read']])]
+#[ApiResource(normalizationContext: ['groups' => ['article_read']])]
 class Articles
 {
     /**

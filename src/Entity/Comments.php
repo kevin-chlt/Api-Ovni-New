@@ -24,7 +24,7 @@ class Comments
     /**
      * @ORM\Column(type="string", length=255)
      */
-    #[Groups(['article_read', 'comments_read'])]
+    #[Groups(['article_read', 'comments_read', 'comments_write'])]
     private $content;
 
     /**
@@ -37,16 +37,21 @@ class Comments
      * @ORM\ManyToOne(targetEntity=Articles::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['article_read', 'comments_read'])]
+    #[Groups(['article_read', 'comments_read', 'comments_write'])]
     private $articles;
 
     /**
      * @ORM\ManyToOne(targetEntity=Users::class, inversedBy="comments")
      * @ORM\JoinColumn(nullable=false)
      */
-    #[Groups(['article_read', 'comments_read'])]
+    #[Groups(['article_read', 'comments_read', 'comments_write'])]
     private $users;
 
+
+    public function __construct()
+    {
+        $this->postedAt = new \DateTime();
+    }
 
     public function getId(): ?int
     {

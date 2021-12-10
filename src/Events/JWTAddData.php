@@ -22,6 +22,7 @@ class JWTAddData
         $payload = $event->getData();
         $payload['firstname'] = $user->getFirstname();
         $payload['lastname'] = $user->getLastname();
+        $payload['id'] = $user->getId();
 
         $event->setData($payload);
 

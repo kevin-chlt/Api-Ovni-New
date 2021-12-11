@@ -12,7 +12,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity(repositoryClass=ArticlesRepository::class)
  */
-#[ApiResource(normalizationContext: ['groups' => ['article_read']])]
+#[ApiResource(
+    collectionOperations: ['GET'],
+    itemOperations: ['GET'],
+    forceEager: false,
+    formats: ['json'],
+    normalizationContext: ['groups' => ['article_read']],
+)]
 class Articles
 {
     /**

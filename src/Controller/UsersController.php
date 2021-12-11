@@ -21,7 +21,7 @@ class UsersController extends AbstractController
         $user = new Users();
         $user->setEmail($request->get('data')['email'])
              ->setFirstname(ucfirst($request->get('data')['firstname']))
-             ->setLastname(ucfirst($request->get('data')['lastname']))
+             ->setLastname(strtoupper($request->get('data')['lastname']))
              ->setPassword($hasher->hashPassword($user, $request->get('data')['password']))
              ->setBirthdate(new \DateTime($request->get('data')['birthdate']));
 

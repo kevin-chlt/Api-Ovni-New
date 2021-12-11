@@ -18,7 +18,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity(repositoryClass=UsersRepository::class)
  * @UniqueEntity("email", message="Un compte existe déjà avec cette email")
  */
-#[ApiResource(denormalizationContext: ['groups' => ['users_write']], normalizationContext: ['groups' => ['users_read']])]
+#[ApiResource(
+    collectionOperations: ['POST'],
+    itemOperations: ['GET'],
+    denormalizationContext: ['groups' => ['users_write']],
+    formats: ['json'],
+    normalizationContext: ['groups' => ['users_read']])]
 class Users implements UserInterface, PasswordAuthenticatedUserInterface
 {
     /**
@@ -44,7 +49,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(min=3, minMessage="Le champ 'prénom' doit contenir au minimum {{ limit }} caractères.",
      *     max=255, maxMessage="Le champ 'prénom' doit contenir au maximum 255 caractères.")
      */
-    #[Groups(['comments_read', 'users_read'])]
+    #[Groups(['comments_read', 'users_read', "article_read"])]
     private $firstname;
 
     /**
@@ -54,7 +59,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
      * @Assert\Length(min=3, minMessage="Le champ 'nom' doit contenir au minimum {{ limit }} caractères.",
      *     max=255, maxMessage="Le champ 'nom'  doit contenir au maximum 255 caractères.")
      */
-    #[Groups(['comments_read', 'users_read'])]
+    #[Groups(['comments_read', 'users_read', "article_read"])]
     private $lastname;
 
     /**

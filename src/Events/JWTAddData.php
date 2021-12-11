@@ -9,7 +9,6 @@ class JWTAddData
 {
     private $userRepository;
 
-
     public function __construct (UsersRepository $usersRepository)
     {
         $this->userRepository = $usersRepository;
@@ -20,8 +19,6 @@ class JWTAddData
         $user = $this->userRepository->find($event->getUser());
 
         $payload = $event->getData();
-        $payload['firstname'] = $user->getFirstname();
-        $payload['lastname'] = $user->getLastname();
         $payload['id'] = $user->getId();
 
         $event->setData($payload);

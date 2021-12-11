@@ -12,7 +12,11 @@ use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * @ORM\Entity(repositoryClass=CategoryRepository::class)
  */
-#[ApiResource]
+#[ApiResource(
+    collectionOperations: ['GET'],
+    itemOperations: ['GET'],
+    formats: ['json'],
+)]
 class Category
 {
     /**

@@ -78,6 +78,7 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
+    #[Groups(['users_read'])]
     private $roles = [];
 
     /**

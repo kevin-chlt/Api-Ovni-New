@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 #[ApiResource(
     collectionOperations: ['GET'],
-    itemOperations: ['GET'],
+    itemOperations: ['GET', 'DELETE'],
     forceEager: false,
     formats: ['json'],
     normalizationContext: ['groups' => ['article_read']],

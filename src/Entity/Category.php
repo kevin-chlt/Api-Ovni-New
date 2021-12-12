@@ -41,6 +41,7 @@ class Category
     /**
      * @ORM\Column(type="string", length=255)
      */
+    #[Groups(["article_read"])]
     private $slug;
 
     public function __construct()

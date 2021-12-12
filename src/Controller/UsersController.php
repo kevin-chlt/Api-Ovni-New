@@ -5,6 +5,7 @@ namespace App\Controller;
 use ApiPlatform\Core\Validator\ValidatorInterface;
 use App\Entity\Users;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Exception\JWTDecodeFailureException;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -37,8 +38,11 @@ class UsersController extends AbstractController
         return $this->json('Inscription réalisée avec succès.');
     }
 
-    #[Route('/user', name: 'getUserDetails', methods: ['GET', 'POST'])]
-    public function getUserDetails (TokenStorageInterface $tokenStorage, JWTTokenManagerInterface $JWTTokenManager) : JsonResponse
+    /**
+     * @throws JWTDecodeFailureException
+     */
+    #[Route('/api/token_details', name: 'getUserDetails', methods: ['GET'])]
+    public function getTokenDetail (TokenStorageInterface $tokenStorage, JWTTokenManagerInterface $JWTTokenManager) : JsonResponse
     {
         return $this->json($JWTTokenManager->decode($tokenStorage->getToken()));
     }

@@ -11,6 +11,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  * @ORM\Entity(repositoryClass=CommentsRepository::class)
  */
 #[ApiResource(
+    collectionOperations: ['POST'],
     itemOperations: [
         'GET',
         'DELETE' => ["security" => "is_granted('ROLE_ADMIN')"]

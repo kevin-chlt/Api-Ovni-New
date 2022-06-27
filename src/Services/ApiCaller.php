@@ -31,7 +31,7 @@ class ApiCaller
             return false;
         }
 
-        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getSlug() . '&pageSize=20&language=fr&apiKey='.$this->apiKey;
+        $url = 'https://newsapi.org/v2/top-headlines?country=fr&category=' . $category->getSlug() . '&apiKey='.$this->apiKey;
         $ressource = fopen($url, 'r');
 
         if (!is_resource($ressource)){
